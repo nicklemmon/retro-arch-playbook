@@ -1,0 +1,7 @@
+[project]
+name = "retro-arch-gba-ansible-playbook"
+version = "0.0.0"
+description = "Ansible Playbook to install RetroArch + GBA emulator"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = []

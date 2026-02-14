@@ -1,0 +1,64 @@
+# retro-setup.yml
+---
+- name: Retro Gaming Emulator Setup
+  hosts: local
+  gather_facts: true
+
+  vars:
+    retro_home: '{{ ansible_facts.env.HOME }}/RetroGaming'
+
+  tasks:
+    - name: Install RetroArch via Homebrew
+      community.general.homebrew_cask:
+        name: retroarch
+        state: present
+
+    - name: Create ROM directory
+      ansible.builtin.file:
+        path: '{{ retro_home }}/ROMs/GBA'
+        state: directory
+        mode: '0755'
+
+    - name: Create saves directory
+      ansible.builtin.file:
+        path: '{{ retro_home }}/Saves/GBA'
+        state: directory
+        mode: '0755'
+
+    - name: Ensure RetroArch config directory exists
+      ansible.builtin.file:
+        path: '{{ ansible_facts.env.HOME }}/.config/retroarch'
+        state: directory
+        mode: '0755'
+
+    - name: Configure RetroArch for GBA
+      ansible.builtin.copy:
+        dest: '{{ ansible_facts.env.HOME }}/.config/retroarch/retroarch.cfg'
+        mode: '0644'
+        content: |
+          # RetroArch GBA Config
+          rgui_browser_directory = "{{ retro_home }}/ROMs/GBA"
+          savefile_directory = "{{ retro_home }}/Saves/GBA"
+          screenshot_directory = "{{ retro_home }}/Screenshots"
+          input_autodetect_enable = "true"
+
+    - name: Install mGBA core
+      ansible.builtin.command:
+        cmd: /Applications/RetroArch.app/Contents/MacOS/RetroArch --subsystem mgba --fetch-core
+      register: core_install
+      failed_when: false
+      changed_when: "'already exists' not in core_install.stderr"
+
+    - name: Print summary
+      ansible.builtin.debug:
+        msg: |
+          ✅ GBA setup complete!
+
+          📁 Drop .gba ROMs into: {{ retro_home }}/ROMs/GBA/
+          💾 Saves will go to: {{ retro_home }}/Saves/GBA/
+          🎮 DualSense should be auto-detected
+
+          To play:
+            1. Open RetroArch
+            2. Load Core → mGBA
+            3. Load Content → pick a ROM from ~/RetroGaming/ROMs/GBA/
