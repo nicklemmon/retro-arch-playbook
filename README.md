@@ -1,4 +1,4 @@
-# RetroArch GBA emulator Ansible playbook
+# RetroArch Ansible playbook
 
 Ansible playbook used to install RetroArch + consistent structure for GBA emulation.
 
