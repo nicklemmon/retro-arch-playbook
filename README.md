@@ -3,15 +3,14 @@
 Ansible playbook used to install RetroArch + consistent structure for GBA emulation.
 
 1. Install [uv](https://docs.astral.sh/uv/getting-started/installation/).
-
-Install `ansible`:
+2. Install `ansible`:
 
 ```bash
 uv tool install ansible-core
 ansible-galaxy collection install community.general
 ```
 
-2. Run the playbook:
+3. Run the playbook:
 
 ```bash
 ansible-playbook -i inventory.ini retro-setup.yml
