@@ -42,12 +42,11 @@
           screenshot_directory = "{{ retro_home }}/Screenshots"
           input_autodetect_enable = "true"
 
-    - name: Install mGBA core
-      ansible.builtin.command:
-        cmd: /Applications/RetroArch.app/Contents/MacOS/RetroArch --subsystem mgba --fetch-core
-      register: core_install
-      failed_when: false
-      changed_when: "'already exists' not in core_install.stderr"
+    - name: Remind to install mGBA core
+      ansible.builtin.debug:
+        msg: >
+          ⚠️ Manual step needed: Open RetroArch → Online Updater → Core Downloader → install mGBA.
+          RetroArch's buildbot URLs change frequently, so the in-app downloader is the reliable way.
 
     - name: Print summary
       ansible.builtin.debug:
